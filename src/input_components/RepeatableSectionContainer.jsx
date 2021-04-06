@@ -39,9 +39,12 @@ const useStyles = makeStyles((theme) => {
           borderColor: borderColor,
         },
       },
-      "&$error": {
-        borderColor: theme.palette.error.main,
-      },
+      // "&$error": {
+      //   borderColor: theme.palette.error.main,
+      // },
+    },
+    borderError: {
+      borderColor: theme.palette.error.main,
     },
   };
 });
@@ -80,6 +83,7 @@ const RepeatableSectionContainer = ({
       label={label}
       helperText={helperText}
       multiline
+      error
       InputProps={{
         classes: {
           root: classes.inputRoot,
@@ -101,7 +105,11 @@ const RepeatableSectionContainer = ({
                 border={1}
                 borderRadius="borderRadius"
                 key={Math.random()}
-                className={(classes.flexColItem, classes.border)}
+                className={clsx(
+                  classes.flexColItem,
+                  classes.border,
+                  error && classes.borderError
+                )}
               >
                 {JSON.stringify(value)}
               </Box>
