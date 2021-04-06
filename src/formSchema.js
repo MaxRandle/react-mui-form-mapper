@@ -1,5 +1,5 @@
 import FreeTextInput from "./input_components/FreeTextInput";
-import RepeatableSection from "./input_components/RepeatableSection";
+import RepeatableSectionContainer from "./input_components/RepeatableSectionContainer";
 
 export const createFormSchema = (params) => ({
   email: {
@@ -21,7 +21,19 @@ export const createFormSchema = (params) => ({
       formData.ingredients
         .map((ingredient) => `${ingredient.name} ${ingredient.quantity}`)
         .join(", "),
-    inputComponent: RepeatableSection,
+    inputComponent: RepeatableSectionContainer,
     inputProps: {},
   },
 });
+
+export const blankForm = {
+  email: "",
+  ingredients: [
+    { name: "", quantity: "" },
+    { name: "", quantity: "" },
+    { name: "", quantity: "" },
+    { name: "", quantity: "" },
+  ],
+};
+
+export const fieldNames = ["email", "ingredients"];
