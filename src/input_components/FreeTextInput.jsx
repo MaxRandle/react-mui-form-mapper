@@ -15,14 +15,14 @@ const FreeTextInput = ({
   helperText,
   displayBlankHelper,
   ...rest
-}) => (
+}) => {return(
   <TextField
     onChange={(event) => onUpdate(event.target.name, event.target.value)}
     helperText={displayBlankHelper ? helperText || " " : helperText}
     fullWidth
     {...rest}
   />
-);
+)};
 
 FreeTextInput.propTypes = {
   label: PropTypes.string,

@@ -15,23 +15,62 @@ export const createFormSchema = (params) => ({
     inputProps: {},
   },
 
-  ingredients: {
+  ingredientQuantities: {
+    
     displayName: "Ingredients List",
     displayValue: (formData) =>
       formData.ingredients
         .map((ingredient) => `${ingredient.name} ${ingredient.quantity}`)
         .join(", "),
+    validationTests: [
+      {
+        test: (formData) => formData.ingredientQuantities !== [],
+        feedback: "must have at least one",
+      },
+    ],
     inputComponent: RepeatableSectionContainer,
-    inputProps: {},
+    inputProps: {newChild: {name: "", quantity: ""}},
   },
+  
+  costAllocations: {
+    displayName: "Cost Allocation",
+    displayValue: formData => formData.costAllocation.map(cost => `${cost.name} ${cost.amount}`).join(", "),
+    inputComponent: RepeatableSectionContainer,
+    inputProps: {newChild: {name: "", amount: ""}},
+  }
 });
+
+export const createCostAllocationSchema = params => ({
+  name: { 
+    displayName: "Name",
+    displayValue: formData => formData.name,
+    validationTests: [
+      {
+        test: (formData) => formData.name !== "",
+        feedback: "field is required",
+      },
+    ],
+    inputComponent: FreeTextInput,
+    inputProps: {}
+  },
+
+  amount: { 
+    displayName: "Amount",
+    displayValue: formData => formData.amount,
+    validationTests: [
+      {
+        test: (formData) => formData.amount !== "",
+        feedback: "field is required",
+      },
+    ],
+    inputComponent: FreeTextInput,
+    inputProps: {}
+  }
+})
 
 export const blankForm = {
   email: "",
   ingredients: [
-    { name: "", quantity: "" },
-    { name: "", quantity: "" },
-    { name: "", quantity: "" },
     { name: "", quantity: "" },
   ],
 };
