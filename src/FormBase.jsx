@@ -16,24 +16,39 @@ const FormBase = (props) => {
   const { initialData, formSchema, fieldNames, ...rest } = props;
   const classes = useStyles();
   const [formData, setFormData] = useState(initialData);
+  const [allowError, setAllowError] = useState(fieldNames);
 
   const handleUpdate = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
+    setAllowError({ ...allowError, [fieldName]: true });
   };
 
   return (
     <Container {...rest} className={classes.flexColContainer} maxWidth="md">
-      {fieldNames.map((fieldName) =>
-        formSchema[fieldName].inputComponent({
+      {fieldNames.map((fieldName) => {
+        let helperText;
+
+        const error = formSchema[fieldName].validationTests.some(
+          ({ test, feedback }) => {
+            const pass = test(formData);
+            if (!pass) {
+              helperText = feedback;
+            }
+            return !pass;
+          }
+        );
+
+        return formSchema[fieldName].inputComponent({
           key: fieldName,
           className: classes.flexColItem,
           name: fieldName,
-          error: true,
-          onUpdate: handleUpdate,
           label: formSchema[fieldName].displayName,
           value: formData[fieldName],
-        })
-      )}
+          onUpdate: handleUpdate,
+          error: error && allowError[fieldName],
+          helperText: allowError[fieldName] && error && helperText,
+        });
+      })}
     </Container>
   );
 };

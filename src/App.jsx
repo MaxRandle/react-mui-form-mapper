@@ -1,4 +1,9 @@
-import { Container, makeStyles, TextField } from "@material-ui/core";
+import {
+  Container,
+  makeStyles,
+  TextField,
+  Typography,
+} from "@material-ui/core";
 import React from "react";
 import FormBase from "./FormBase";
 import { createFormSchema, blankForm, fieldNames } from "./formSchema";
@@ -17,11 +22,13 @@ const useStyles = makeStyles((theme) => ({
 const App = () => {
   const formSchema = createFormSchema();
   return (
-    <FormBase
-      formSchema={formSchema}
-      fieldNames={fieldNames}
-      initialData={blankForm}
-    />
+    <>
+      <FormBase
+        formSchema={formSchema}
+        fieldNames={fieldNames}
+        initialData={blankForm}
+      />
+    </>
   );
 };
 

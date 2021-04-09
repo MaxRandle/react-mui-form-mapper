@@ -69,10 +69,11 @@ const RepeatableSectionContainer = ({
     const idx = valueArray.findIndex((e) => id === e.id);
     onUpdate(name, [...valueArray.splice(idx, 0, newValue)]);
   };
-  const handleDelete = (id) => {
-    const idx = valueArray.findIndex((e) => id === e.id);
-    onUpdate(name, [...valueArray.splice(idx, 1)]);
-  };
+  const handleDelete = (id) =>
+    onUpdate(
+      name,
+      valueArray.filter((e) => id !== e.id)
+    );
 
   return (
     <TextField
