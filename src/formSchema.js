@@ -1,3 +1,4 @@
+import FormSection from "./input_components/FormSection";
 import FreeTextInput from "./input_components/FreeTextInput";
 import RepeatableSectionContainer from "./input_components/RepeatableSectionContainer";
 
@@ -78,15 +79,25 @@ export const blankForm = {
 
 export const fieldNames = ["email", "ingredientQuantities"];
 
-export const costAllocation = (params) => {
-  return {
-    displayName: "Cost Allocation",
-    toString: (formData) =>
-      formData.costAllocation
-        .map((cost) => `${cost.name} ${cost.amount}`)
-        .join(", "),
-    inputComponent: RepeatableSectionContainer,
-    inputProps: { newChild: { name: "", amount: "" } },
-    validate: (formData) => formData.length > 0,
-  };
+const hoursDiff = (date1, date2) => (date1 - date2) / 36e5;
+
+export const costAllocation = {
+  displayName: "Cost Allocation",
+  toString: (formData) =>
+    formData.costAllocation
+      .map((cost) => `${cost.name} ${cost.amount}`)
+      .join(", "),
+  Component: RepeatableSectionContainer,
+  // child: []
+  inputProps: { newChild: { name: "", amount: "" } },
+  validate: (formData) => formData.length > 0,
+};
+
+const hourlyJob = {
+  displayName: "Hourly Job",
+  toString: (data) => JSON.stringify(data),
+  Component: FormSection,
+  validate: (data) =>
+    data.costAllocation.reduce((acc, cur) => acc + cur.amount, 0) ===
+    hoursDiff(data.startTime, data.endTime) * data.hourlyRate,
 };

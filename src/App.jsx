@@ -7,6 +7,7 @@ import {
 import React from "react";
 import FormBase from "./FormBase";
 import { createFormSchema, blankForm, fieldNames } from "./formSchema";
+import FormSection from "./input_components/FormSection";
 
 const useStyles = makeStyles((theme) => ({
   flexColContainer: {
@@ -23,11 +24,13 @@ const App = () => {
   const formSchema = createFormSchema();
   return (
     <>
-      <FormBase
+      {/* <FormBase
         formSchema={formSchema}
         fieldNames={fieldNames}
         initialData={blankForm}
-      />
+      /> */}
+
+      <FormSection Child />
     </>
   );
 };

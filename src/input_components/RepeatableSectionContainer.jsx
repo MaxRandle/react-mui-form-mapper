@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => {
 
 const RepeatableSectionContainer = ({
   name,
-  value: valueArray,
+  value,
   onUpdate,
   helperText,
   displayBlankHelper,
@@ -60,19 +60,20 @@ const RepeatableSectionContainer = ({
   focused,
   disabled,
   label,
+  children,
   ...rest
 }) => {
   const classes = useStyles();
 
-  const handleCreate = () => onUpdate(name, [{}, ...valueArray]);
+  const handleCreate = () => onUpdate(name, [children, ...value]);
   const handleUpdate = (id, newValue) => {
-    const idx = valueArray.findIndex((e) => id === e.id);
-    onUpdate(name, [...valueArray.splice(idx, 0, newValue)]);
+    const idx = value.findIndex((e) => id === e.id);
+    onUpdate(name, [...value.splice(idx, 0, newValue)]);
   };
   const handleDelete = (id) =>
     onUpdate(
       name,
-      valueArray.filter((e) => id !== e.id)
+      value.filter((e) => id !== e.id)
     );
 
   return (
@@ -95,26 +96,17 @@ const RepeatableSectionContainer = ({
               variant="contained"
               color="primary"
               className={classes.flexColItem}
+              onClick={handleCreate}
             >
               add
             </Button>
-            <IconButton>
+            {/* <IconButton>
               <Add />
-            </IconButton>
-            {valueArray.map((value) => (
-              <Box
-                border={1}
-                borderRadius="borderRadius"
-                key={Math.random()}
-                className={clsx(
-                  classes.flexColItem,
-                  classes.border,
-                  error && classes.borderError
-                )}
-              >
-                {JSON.stringify(value)}
-              </Box>
-            ))}
+            </IconButton> */}
+            {value.map((Child) => {
+              const id = "";
+              return <Child key={id} />;
+            })}
           </Box>
         ),
       }}
