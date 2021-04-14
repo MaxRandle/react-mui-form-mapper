@@ -1,103 +1,88 @@
-import FormSection from "./input_components/FormSection";
-import FreeTextInput from "./input_components/FreeTextInput";
-import RepeatableSectionContainer from "./input_components/RepeatableSectionContainer";
+import {
+  DateTimeStringInput,
+  FormSection,
+  FreeTextInput,
+  RepeatableFormSection,
+} from "./input-components";
 
-export const createFormSchema = (params) => ({
-  email: {
-    displayName: "Email",
-    displayValue: (formData) => formData.email,
-    inputComponent: FreeTextInput,
-    validationTests: [
-      {
-        test: (formData) => formData.email !== "",
-        feedback: "field is required",
-      },
-    ],
-    inputProps: {},
-  },
+const hoursDiff = (dateString1, dateString2) =>
+  (new Date(dateString1) - new Date(dateString2)) / 36e5;
 
-  ingredientQuantities: {
-    displayName: "Ingredients List",
-    displayValue: (formData) =>
-      formData.ingredients
-        .map((ingredient) => `${ingredient.name} ${ingredient.quantity}`)
-        .join(", "),
-    validationTests: [
-      {
-        test: (formData) => formData.ingredientQuantities !== [],
-        feedback: "must have at least one",
-      },
-    ],
-    inputComponent: RepeatableSectionContainer,
-    inputProps: { newChild: { name: "", quantity: "" } },
-  },
-
-  costAllocations: {
-    displayName: "Cost Allocation",
-    displayValue: (formData) =>
-      formData.costAllocation
-        .map((cost) => `${cost.name} ${cost.amount}`)
-        .join(", "),
-    inputComponent: RepeatableSectionContainer,
-    inputProps: { newChild: { name: "", amount: "" } },
-  },
-});
-
-// export const createCostAllocationSchema = (params) => ({
-// export const createCostAllocationSchema = (params) => ({
-//   name: {
-//     displayName: "Name",
-//     displayValue: (formData) => formData.name,
-//     validationTests: [
-//       {
-//         test: (formData) => formData.name !== "",
-//         feedback: "field is required",
-//       },
-//     ],
-//     inputComponent: FreeTextInput,
-//     inputProps: {},
-//   },
-
-//   amount: {
-//     displayName: "Amount",
-//     displayValue: (formData) => formData.amount,
-//     validationTests: [
-//       {
-//         test: (formData) => formData.amount !== "",
-//         feedback: "field is required",
-//       },
-//     ],
-//     inputComponent: FreeTextInput,
-//     inputProps: {},
-//   },
-// });
-
-export const blankForm = {
-  email: "",
-  ingredients: [{ name: "", quantity: "" }],
+const name = {
+  displayName: "Name",
+  toString: (data) => data,
+  Component: FreeTextInput,
+  validate: (data) => data !== "",
 };
 
-export const fieldNames = ["email", "ingredientQuantities"];
+const amount = {
+  displayName: "Amount",
+  toString: (data) => data,
+  Component: FreeTextInput,
+  validate: (data) => data !== "",
+};
 
-const hoursDiff = (date1, date2) => (date1 - date2) / 36e5;
-
-export const costAllocation = {
+const costAllocation = {
   displayName: "Cost Allocation",
-  toString: (formData) =>
-    formData.costAllocation
-      .map((cost) => `${cost.name} ${cost.amount}`)
-      .join(", "),
-  Component: RepeatableSectionContainer,
-  // child: []
-  inputProps: { newChild: { name: "", amount: "" } },
-  validate: (formData) => formData.length > 0,
+  toString: (data) =>
+    `${name.toString(data.name)} ${amount.toString(data.amount)}`,
+  Component: FormSection,
+  validate: (data) => true,
+  children: {
+    name,
+    amount,
+  },
 };
 
-const hourlyJob = {
+const costAllocationArray = {
+  displayName: "Cost Allocation List",
+  toString: (data) =>
+    data.map((child) => costAllocation.toString(child)).join(", "),
+  Component: RepeatableFormSection,
+  validate: (data) => data.length > 0,
+  child: costAllocation,
+};
+
+const startDateTimeString = {
+  displayName: "Start Time",
+  toString: (data) => data,
+  Component: DateTimeStringInput,
+  validate: (data) => data !== "",
+};
+
+const endDateTimeString = {
+  displayName: "Start Time",
+  toString: (data) => data,
+  Component: DateTimeStringInput,
+  validate: (data) => data !== "",
+};
+
+const hourlyRate = {
+  displayName: "Hourly Rate",
+  toString: (data) => data,
+  Component: FreeTextInput,
+  validate: (data) => data !== "",
+};
+
+export const hourlyJob = {
   displayName: "Hourly Job",
   toString: (data) => JSON.stringify(data),
   Component: FormSection,
   validate: (data) =>
-    data.costAllocation.reduce((acc, cur) => acc + cur.amount, 0) ===
-    hoursDiff(data.startTime, data.endTime) * data.hourlyRate,
+    data.costAllocationArray.reduce((acc, cur) => acc + cur.amount, 0) ===
+    hoursDiff(data.startDateTimeString, data.endDateTimeString) *
+      data.hourlyRate,
+  children: {
+    startDateTimeString,
+    endDateTimeString,
+    hourlyRate,
+    costAllocationArray,
+  },
+};
+
+export const blankHourlyJob = {
+  startDateTimeString: "",
+  endDateTimeString: "",
+  hourlyRate: "",
+  costAllocationArray: [{ name: "", amount: "" }],
 };

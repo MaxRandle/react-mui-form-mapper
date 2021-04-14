@@ -4,9 +4,9 @@ import {
   TextField,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import FormBase from "./FormBase";
-import { createFormSchema, blankForm, fieldNames } from "./formSchema";
+import { blankHourlyJob, hourlyJob } from "./formSchema";
 import FormSection from "./input_components/FormSection";
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +21,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const App = () => {
-  const formSchema = createFormSchema();
+  const [formData, setFormData] = useState(blankHourlyJob);
+  const [error, setError] = useState(false);
+
   return (
     <>
       {/* <FormBase
@@ -30,7 +32,9 @@ const App = () => {
         initialData={blankForm}
       /> */}
 
-      <FormSection Child />
+      {/* <FormSection /> */}
+
+      {hourlyJob.Component()}
     </>
   );
 };

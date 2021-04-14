@@ -54,7 +54,7 @@ const FormSection = ({
         classes: {
           root: classes.inputRoot,
         },
-        inputComponent: () => <Child onUpdate={handleUpdate} />,
+        inputComponent: () => <></>,
       }}
     />
   );
