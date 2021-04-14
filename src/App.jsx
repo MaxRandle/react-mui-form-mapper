@@ -5,9 +5,13 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import FormBase from "./FormBase";
 import { blankHourlyJob, hourlyJob } from "./formSchema";
-import FormSection from "./input_components/FormSection";
+import {
+  DateTimeStringInput,
+  FormSection,
+  FreeTextInput,
+  RepeatableFormSection,
+} from "./input-components";
 
 const useStyles = makeStyles((theme) => ({
   flexColContainer: {
@@ -34,7 +38,13 @@ const App = () => {
 
       {/* <FormSection /> */}
 
-      {hourlyJob.Component()}
+      <FormSection
+        {...hourlyJob}
+        value={formData}
+        setValue={setFormData}
+        error={error}
+        setError={setError}
+      />
     </>
   );
 };

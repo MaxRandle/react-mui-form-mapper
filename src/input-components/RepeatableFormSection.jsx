@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -50,31 +50,40 @@ const useStyles = makeStyles((theme) => {
 });
 
 const RepeatableSectionContainer = ({
-  name,
-  value,
-  onUpdate,
-  helperText,
-  displayBlankHelper,
-  error,
-  className,
-  focused,
-  disabled,
+  // passed from schema
   label,
-  children,
+  toString, // unused
+  Component, // unused
+  validate,
+  child,
+  blankNewChild,
+  // parent state and setters
+  value,
+  setValue,
+  error,
+  setError,
+  // misc
+  className,
+  disabled,
+  // rest
   ...rest
 }) => {
   const classes = useStyles();
+  const [childErrors, setChildErrors] = useState({});
 
-  const handleCreate = () => onUpdate(name, [children, ...value]);
+  const handleCreate = () =>
+    setValue([{ id: Math.random(), ...blankNewChild }, ...value]);
   const handleUpdate = (id, newValue) => {
     const idx = value.findIndex((e) => id === e.id);
-    onUpdate(name, [...value.splice(idx, 0, newValue)]);
+    setValue([...value.splice(idx, 0, newValue)]);
   };
-  const handleDelete = (id) =>
-    onUpdate(
-      name,
-      value.filter((e) => id !== e.id)
-    );
+  const handleDelete = (id) => setValue(value.filter((e) => id !== e.id));
+
+  const handleErrorChange = (id, newError) => {
+    const newChildErrors = { ...childErrors, [id]: newError };
+    setChildErrors(newChildErrors);
+    setError(Object.values(newChildErrors).includes(false) || !validate(value));
+  };
 
   return (
     <TextField
@@ -83,9 +92,9 @@ const RepeatableSectionContainer = ({
       variant="outlined"
       InputLabelProps={{ shrink: true }}
       label={label}
-      helperText={helperText}
+      // helperText={helperText}
       multiline
-      error
+      error={error}
       InputProps={{
         classes: {
           root: classes.inputRoot,
@@ -93,19 +102,24 @@ const RepeatableSectionContainer = ({
         inputComponent: () => (
           <Box className={classes.flexColContainer}>
             <Button
-              variant="contained"
+              variant="outlined"
               color="primary"
               className={classes.flexColItem}
               onClick={handleCreate}
             >
               add
             </Button>
-            {/* <IconButton>
-              <Add />
-            </IconButton> */}
-            {value.map((Child) => {
-              const id = "";
-              return <Child key={id} />;
+
+            {value.map((section) => {
+              return child.Component({
+                key: section.id,
+                ...child,
+                value: section,
+                setValue: (newValue) => handleUpdate(section.id, newValue),
+                error: childErrors[section.id],
+                setError: (newError) => handleErrorChange(section.id, newError),
+                className: classes.flexColItem,
+              });
             })}
           </Box>
         ),

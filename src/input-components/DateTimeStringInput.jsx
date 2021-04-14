@@ -2,37 +2,50 @@ import React, { useState } from "react";
 import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 
-export const GenericDateIsoStringInputComponent = ({
+const DateTimeStringInput = ({
+  // passed from schema
+  label,
+  validate,
+  toString, // unused
+  Component, // unused
+  // parent state and setters
   value,
-  onUpdate,
+  setValue,
+  error,
+  setError,
+  // misc
+  className,
+  disabled,
+  // rest
   ...rest
 }) => {
-  const [dateString, setDateString] = useState(
-    value ? value.split("T")[0] : ""
-  );
-  const [timeString, setTimeString] = useState(
-    value ? value.split("T")[1] : "00:00:00"
-  );
-
-  const handleChange = (event) => {
-    setDateString(event.target.value);
-    if (event.target.value === "") onUpdate(event.target.name, undefined);
-    else onUpdate(event.target.name, `${event.target.value}T${timeString}`);
+  const handleValueChange = (event) => {
+    setValue(event.target.value);
+    setError(!validate(value));
   };
 
   return (
     <TextField
-      type="date"
-      value={dateString}
-      onChange={handleChange}
+      type="datetime-local"
+      value={value}
+      label={label}
+      InputLabelProps={{ shrink: true }}
+      onChange={handleValueChange}
+      // helperText={displayBlankHelper ? helperText || " " : helperText}
+      fullWidth
+      className={className}
+      disabled={disabled}
       {...rest}
     />
   );
 };
-GenericDateIsoStringInputComponent.propTypes = {
-  label: PropTypes.string,
-  name: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
-  onUpdate: PropTypes.func.isRequired,
-  error: PropTypes.bool,
-};
+
+// DateTimeStringInput.propTypes = {
+//   label: PropTypes.string,
+//   name: PropTypes.string.isRequired,
+//   value: PropTypes.string.isRequired,
+//   onUpdate: PropTypes.func.isRequired,
+//   error: PropTypes.bool,
+// };
+
+export default DateTimeStringInput;
