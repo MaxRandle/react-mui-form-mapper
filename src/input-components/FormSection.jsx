@@ -69,8 +69,8 @@ const FormSection = ({
 
         // inputComponent: () => <></>,
 
-        inputComponent: React.createRef((props, ref) => (
-          <Box ref={ref} {...props} className={classes.flexColContainer}>
+        inputComponent: () => (
+          <Box className={classes.flexColContainer}>
             {Object.keys(children).map((childFieldName) => {
               const child = children[childFieldName];
               return child.Component({
@@ -86,29 +86,29 @@ const FormSection = ({
               });
             })}
           </Box>
-        )),
 
-        // inputComponent: () => (
-        //   <Box className={classes.flexColContainer}>
-        //     {Object.keys(children).map((childFieldName) => {
-        //       const child = children[childFieldName];
-        //       return child.Component({
-        //         ...child,
-        //         key: childFieldName,
-        //         value: value[childFieldName],
-        //         setValue: (newValue) =>
-        //           handleValueChange(childFieldName, newValue),
-        //         error: childErrors[childFieldName],
-        //         setError: (newError) =>
-        //           handleErrorChange(childFieldName, newError),
-        //         className: classes.flexColItem,
-        //       });
-        //     })}
-        //   </Box>
-        // ),
+          // inputComponent: React.createRef((props, ref) => (
+          //   <Box ref={ref} {...props} className={classes.flexColContainer}>
+          //     {Object.keys(children).map((childFieldName) => {
+          //       const child = children[childFieldName];
+          //       return child.Component({
+          //         ...child,
+          //         key: childFieldName,
+          //         value: value[childFieldName],
+          //         setValue: (newValue) =>
+          //           handleValueChange(childFieldName, newValue),
+          //         error: childErrors[childFieldName],
+          //         setError: (newError) =>
+          //           handleErrorChange(childFieldName, newError),
+          //         className: classes.flexColItem,
+          //       });
+          //     })}
+          //   </Box>
+          // )),
+        ),
       }}
     >
-      <Box className={classes.flexColContainer}>
+      {/* <Box className={classes.flexColContainer}>
         {Object.keys(children).map((childFieldName) => {
           const child = children[childFieldName];
           return child.Component({
@@ -121,7 +121,7 @@ const FormSection = ({
             className: classes.flexColItem,
           });
         })}
-      </Box>
+      </Box> */}
     </TextField>
   );
 };
