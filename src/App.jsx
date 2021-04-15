@@ -1,6 +1,7 @@
 import {
   Container,
   makeStyles,
+  OutlinedInput,
   TextField,
   Typography,
 } from "@material-ui/core";
@@ -26,26 +27,26 @@ const useStyles = makeStyles((theme) => ({
 
 const App = () => {
   const [formData, setFormData] = useState(blankHourlyJob);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState(true);
+  const classes = useStyles();
 
   return (
-    <>
-      {/* <FormBase
-        formSchema={formSchema}
-        fieldNames={fieldNames}
-        initialData={blankForm}
-      /> */}
+    <Container className={classes.flexColContainer} maxWidth="xs">
+      {/* <TextField InputProps={{ inputComponent: OutlinedInput }} /> */}
 
-      {/* <FormSection /> */}
+      {/* <FormControl variant="outlined">
+        <InputLabel htmlFor="component-outlined">Name</InputLabel>
+        <OutlinedInput id="component-outlined" value={name} onChange={handleChange} label="Name" />
+      </FormControl> */}
 
-      <FormSection
+      {/* <FormSection
         {...hourlyJob}
         value={formData}
         setValue={setFormData}
         error={error}
         setError={setError}
-      />
-    </>
+      /> */}
+    </Container>
   );
 };
 

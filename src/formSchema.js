@@ -52,7 +52,7 @@ const startDateTimeString = {
 };
 
 const endDateTimeString = {
-  label: "Start Time",
+  label: "End Time",
   toString: (data) => data,
   Component: DateTimeStringInput,
   validate: (data) => data !== "",
@@ -60,6 +60,13 @@ const endDateTimeString = {
 
 const hourlyRate = {
   label: "Hourly Rate",
+  toString: (data) => data,
+  Component: FreeTextInput,
+  validate: (data) => data !== "",
+};
+
+const approverName = {
+  label: "Approver Name",
   toString: (data) => data,
   Component: FreeTextInput,
   validate: (data) => data !== "",
@@ -78,6 +85,7 @@ export const hourlyJob = {
     endDateTimeString,
     hourlyRate,
     costAllocationArray,
+    approverName,
   },
 };
 
@@ -85,5 +93,6 @@ export const blankHourlyJob = {
   startDateTimeString: "",
   endDateTimeString: "",
   hourlyRate: "",
-  costAllocationArray: [{ name: "", amount: "" }],
+  costAllocationArray: [],
+  approverName: "",
 };

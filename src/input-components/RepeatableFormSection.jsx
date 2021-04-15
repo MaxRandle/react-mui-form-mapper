@@ -10,11 +10,6 @@ import clsx from "clsx";
 import { Add } from "@material-ui/icons";
 
 const useStyles = makeStyles((theme) => {
-  const borderColor =
-    theme.palette.type === "light"
-      ? "rgba(0, 0, 0, 0.23)"
-      : "rgba(255, 255, 255, 0.23)";
-
   return {
     root: {},
     inputRoot: {
@@ -23,28 +18,13 @@ const useStyles = makeStyles((theme) => {
     flexColContainer: {
       display: "flex",
       flexDirection: "column",
+      flexGrow: 1,
     },
     flexColItem: {
-      marginBottom: theme.spacing(1),
-    },
-    border: {
-      padding: "18.5px 14px",
-      borderColor: borderColor,
-      "&:hover": {
-        borderColor: theme.palette.text.primary,
+      marginBottom: theme.spacing(2),
+      "&:last-child": {
+        marginBottom: theme.spacing(0),
       },
-      // Reset on touch devices, it doesn't add specificity
-      "@media (hover: none)": {
-        "&:hover": {
-          borderColor: borderColor,
-        },
-      },
-      // "&$error": {
-      //   borderColor: theme.palette.error.main,
-      // },
-    },
-    borderError: {
-      borderColor: theme.palette.error.main,
     },
   };
 });
@@ -94,6 +74,7 @@ const RepeatableSectionContainer = ({
       label={label}
       // helperText={helperText}
       multiline
+      fullWidth
       error={error}
       InputProps={{
         classes: {
@@ -109,7 +90,6 @@ const RepeatableSectionContainer = ({
             >
               add
             </Button>
-
             {value.map((section) => {
               return child.Component({
                 key: section.id,

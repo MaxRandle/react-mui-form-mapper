@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { TextField } from "@material-ui/core";
 import PropTypes from "prop-types";
 
@@ -27,8 +27,9 @@ const DateTimeStringInput = ({
   return (
     <TextField
       type="datetime-local"
-      value={value}
       label={label}
+      value={value}
+      error={error}
       InputLabelProps={{ shrink: true }}
       onChange={handleValueChange}
       // helperText={displayBlankHelper ? helperText || " " : helperText}

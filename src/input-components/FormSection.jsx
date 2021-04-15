@@ -10,9 +10,13 @@ const useStyles = makeStyles((theme) => ({
   flexColContainer: {
     display: "flex",
     flexDirection: "column",
+    flexGrow: 1,
   },
   flexColItem: {
-    marginBottom: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+    "&:last-child": {
+      marginBottom: theme.spacing(0),
+    },
   },
 }));
 
@@ -37,8 +41,8 @@ const FormSection = ({
   const classes = useStyles();
   const [childErrors, setChildErrors] = useState({});
 
-  const handleValueChange = (childFieldName, value) =>
-    setValue({ ...value, [childFieldName]: value });
+  const handleValueChange = (childFieldName, newValue) =>
+    setValue({ ...value, [childFieldName]: newValue });
 
   const handleErrorChange = (childFieldName, newError) => {
     const newChildErrors = { ...childErrors, [childFieldName]: newError };
@@ -56,17 +60,22 @@ const FormSection = ({
       label={label}
       // helperText={helperText}
       multiline
+      fullWidth
       error={error}
       InputProps={{
         classes: {
           root: classes.inputRoot,
         },
-        inputComponent: () => (
-          <Box className={classes.flexColContainer}>
+
+        // inputComponent: () => <></>,
+
+        inputComponent: React.createRef((props, ref) => (
+          <Box ref={ref} {...props} className={classes.flexColContainer}>
             {Object.keys(children).map((childFieldName) => {
               const child = children[childFieldName];
               return child.Component({
                 ...child,
+                key: childFieldName,
                 value: value[childFieldName],
                 setValue: (newValue) =>
                   handleValueChange(childFieldName, newValue),
@@ -77,9 +86,43 @@ const FormSection = ({
               });
             })}
           </Box>
-        ),
+        )),
+
+        // inputComponent: () => (
+        //   <Box className={classes.flexColContainer}>
+        //     {Object.keys(children).map((childFieldName) => {
+        //       const child = children[childFieldName];
+        //       return child.Component({
+        //         ...child,
+        //         key: childFieldName,
+        //         value: value[childFieldName],
+        //         setValue: (newValue) =>
+        //           handleValueChange(childFieldName, newValue),
+        //         error: childErrors[childFieldName],
+        //         setError: (newError) =>
+        //           handleErrorChange(childFieldName, newError),
+        //         className: classes.flexColItem,
+        //       });
+        //     })}
+        //   </Box>
+        // ),
       }}
-    />
+    >
+      <Box className={classes.flexColContainer}>
+        {Object.keys(children).map((childFieldName) => {
+          const child = children[childFieldName];
+          return child.Component({
+            ...child,
+            key: childFieldName,
+            value: value[childFieldName],
+            setValue: (newValue) => handleValueChange(childFieldName, newValue),
+            error: childErrors[childFieldName],
+            setError: (newError) => handleErrorChange(childFieldName, newError),
+            className: classes.flexColItem,
+          });
+        })}
+      </Box>
+    </TextField>
   );
 };
 

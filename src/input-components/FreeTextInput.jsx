@@ -39,8 +39,9 @@ const FreeTextInput = ({
 
   return (
     <TextField
-      value={value}
       label={label}
+      value={value}
+      error={error}
       onChange={handleValueChange}
       // helperText={displayBlankHelper ? helperText || " " : helperText}
       fullWidth
