@@ -1,54 +1,58 @@
-import React from "react";
 import { makeStyles } from "@material-ui/core";
 import clsx from "clsx";
+import FormLabel from "./FormLabel";
+import LabelledOutline from "./LabelledOutline";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    top: -10,
-    left: 0,
-    margin: 0,
-    padding: "0 8px",
-    pointerEvents: "none",
-    borderRadius: "inherit",
-    borderStyle: "solid",
-    borderWidth: 1,
-    overflow: "hidden",
-  },
-  legendNotched: {
-    maxWidth: 1000,
-    transition: theme.transitions.create("max-width", {
-      duration: 100,
-      easing: theme.transitions.easing.easeOut,
-      delay: 50,
-    }),
-  },
-  flexColContainer: {
-    display: "flex",
-    flexDirection: "column",
-    flexGrow: 1,
-  },
-  flexColItem: {
-    marginBottom: theme.spacing(2),
-    "&:last-child": {
-      marginBottom: theme.spacing(0),
+const useStyles = makeStyles((theme) => {
+  var borderColor =
+    theme.palette.type === "light"
+      ? "rgba(0, 0, 0, 0.23)"
+      : "rgba(255, 255, 255, 0.23)";
+  return {
+    root: {
+      padding: "18.5px 14px",
+      position: "relative",
+      borderRadius: theme.shape.borderRadius,
+      "&:hover $laballedOutline": {
+        borderColor: theme.palette.text.primary,
+      },
+      // Reset on touch devices, it doesn't add specificity
+      "@media (hover: none)": {
+        "&:hover $laballedOutline": {
+          borderColor: borderColor,
+        },
+      },
+      "&$focused $laballedOutline": {
+        borderColor: theme.palette.primary.main,
+        borderWidth: 2,
+      },
+      "&$error $laballedOutline": {
+        borderColor: theme.palette.error.main,
+      },
+      "&$disabled $laballedOutline": {
+        borderColor: theme.palette.action.disabled,
+      },
     },
-  },
-}));
+    laballedOutline: {
+      borderColor: borderColor,
+    },
+  };
+});
 
-const FieldSet = ({ label, className, ...rest }) => {
+const FieldSet = ({ label, className, children, outlined, ...rest }) => {
   const classes = useStyles();
   return (
-    <fieldset
-      className={clsx(classes.root, className)}
-      classes={{ notchedOutline: null }}
-      {...rest}
-    >
-      <legend className={classes.legendNotched}>{label}</legend>
-      <span dangerouslySetInnerHTML={{ __html: "&#8203;" }}></span>
-    </fieldset>
+    <div className={clsx(classes.root, className)} {...rest}>
+      <FormLabel>{label}</FormLabel>
+      {children}
+      {outlined && (
+        <LabelledOutline
+          className={clsx(classes.laballedOutline)}
+          label={label}
+          notched={label ?? false}
+        />
+      )}
+    </div>
   );
 };
 

@@ -69,12 +69,13 @@ const FormSection = ({
 
         // inputComponent: () => <></>,
 
-        inputComponent: () => (
+        inputComponent: ({ inputRef, ...others }) => (
           <Box className={classes.flexColContainer}>
             {Object.keys(children).map((childFieldName) => {
               const child = children[childFieldName];
               return child.Component({
                 ...child,
+                ref: { inputRef },
                 key: childFieldName,
                 value: value[childFieldName],
                 setValue: (newValue) =>
